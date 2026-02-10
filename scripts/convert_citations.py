@@ -1,65 +1,30 @@
-import argparse
-import re
+#!/usr/bin/env python3
+"""
+Wrapper script that delegates to the paper-tooling submodule.
+This keeps the paper repo minimal and uses shared tooling.
+"""
+import subprocess
 import sys
 from pathlib import Path
 
-TOKEN_PATTERN = re.compile(r"\{[^{}]*?#\s*(\d+)\s*\}")
-REMAINING_PATTERN = re.compile(r"\{[^{}]*#\s*\d+[^{}]*\}")
-
-
-def convert_text(text: str) -> tuple[str, int]:
-    def replacer(match: re.Match[str]) -> str:
-        return f"[@RN{match.group(1)}]"
-
-    return TOKEN_PATTERN.subn(replacer, text)
-
-
-def process_file(path: Path, out_dir: Path, dry_run: bool) -> tuple[int, bool]:
-    text = path.read_text(encoding="utf-8")
-    converted, count = convert_text(text)
-    has_remaining = bool(REMAINING_PATTERN.search(converted))
-
-    if dry_run:
-        print(f"{path.name}: {count} replacements")
-        return count, has_remaining
-
-    out_path = out_dir / path.name
-    out_path.write_text(converted, encoding="utf-8")
-    return count, has_remaining
-
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Convert EndNote unformatted citations to Pandoc citations.")
-    parser.add_argument("--in-dir", default="paper/sections", help="Input directory of Markdown files")
-    parser.add_argument("--out-dir", default="paper/generated_md", help="Output directory for converted Markdown")
-    parser.add_argument("--check", action="store_true", help="Fail if any tokens with #digits remain")
-    parser.add_argument("--dry-run", action="store_true", help="Show replacement counts without writing output")
-    args = parser.parse_args()
-
-    in_dir = Path(args.in_dir)
-    out_dir = Path(args.out_dir)
-
-    if not in_dir.exists():
-        print(f"Input directory not found: {in_dir}", file=sys.stderr)
+    # Check if submodule exists
+    tooling_script = Path(__file__).parent.parent / "tooling" / "paper-tooling" / "scripts" / "convert_citations.py"
+    
+    if not tooling_script.exists():
+        print(
+            "Error: paper-tooling submodule not found.\n"
+            "Please initialize the submodule:\n"
+            "  git submodule update --init --recursive",
+            file=sys.stderr
+        )
         return 1
-
-    md_files = sorted(in_dir.glob("*.md"))
-    if not md_files:
-        print(f"No Markdown files found in {in_dir}")
-
-    if not args.dry_run:
-        out_dir.mkdir(parents=True, exist_ok=True)
-
-    had_remaining = False
-    for path in md_files:
-        _, has_remaining = process_file(path, out_dir, args.dry_run)
-        had_remaining = had_remaining or has_remaining
-
-    if args.check and had_remaining:
-        print("Unconverted EndNote tokens with #digits remain.", file=sys.stderr)
-        return 2
-
-    return 0
+    
+    # Delegate to the real script, passing all arguments
+    cmd = [sys.executable, str(tooling_script)] + sys.argv[1:]
+    result = subprocess.run(cmd)
+    return result.returncode
 
 
 if __name__ == "__main__":

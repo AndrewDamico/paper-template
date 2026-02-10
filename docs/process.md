@@ -1,5 +1,12 @@
 # Workflow
 
+0. Setup: Tooling submodule
+   - This template uses a git submodule for shared build scripts.
+   - Clone with: git clone --recurse-submodules <repo-url>
+   - Or initialize after clone: git submodule update --init --recursive
+   - To update tooling: git submodule update --remote --merge
+   - Each paper repo pins a specific tooling commit for reproducibility.
+
 1. A) EndNote workflow
    - Maintain one master EndNote library.
    - Create a per-paper Group.
@@ -17,6 +24,31 @@
    - It compiles paper/main_full.tex or paper/main_abstract.tex via latexmk and biber.
    - Build artifacts are written under paper/build.
    - Build artifacts are not committed.
+
+3.5. Analysis workflow
+   1. Put notebooks in code/notebooks and helper scripts in code/src.
+   2. In notebooks, import and call bootstrap:
+      ```python
+      from code.src.bootstrap_tooling import setup_tooling
+      setup_tooling()
+      import andrewdamico as ad
+      ```
+   3. Use andrewdamico helpers for run management:
+      ```python
+      run_id = ad.start_run(label="exp1")
+      ad.set_current_run(run_id=run_id)
+      ```
+   4. When producing figures and tables for the paper, export to paper/figures and paper/tables:
+      ```python
+      ad.export_figure(name="fig_01", fig=my_fig, formats=["pdf", "png"])
+      ad.export_table(name="tbl_01", df=my_df, formats=["tex", "csv"])
+      ```
+   5. For existing code repositories, add them under code/external/ as submodules:
+      ```bash
+      git submodule add <url> code/external/<name>
+      git submodule update --init --recursive
+      ```
+   6. Reproducibility: paper repo tags capture the state of paper content + analysis code. The tooling submodule commit is also pinned, ensuring the build and export helpers remain stable.
 
 4. Preserving submissions
    - At submission time, create an annotated tag:

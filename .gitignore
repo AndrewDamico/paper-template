@@ -13,6 +13,8 @@ paper/build/*
 !paper/build/README.md
 
 
+
+
 # LaTeX build artifacts
 **/*.aux
 **/*.log
@@ -28,6 +30,14 @@ paper/build/*
 **/*.lof
 **/*.lot
 
+# Code outputs (scratch files)
+code/outputs/*
+!code/outputs/.gitkeep
+!code/outputs/README.md
+
 # Python cache
 __pycache__/
 *.py[cod]
+
+# Project Management Artifacts
+pm/

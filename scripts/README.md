@@ -1,1 +1,1 @@
-Automation scripts for converting citations, generating LaTeX, and building the PDF.
+Thin wrapper scripts that delegate to the paper-tooling submodule. The real implementation lives in tooling/paper-tooling/scripts/.

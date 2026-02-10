@@ -1,0 +1,1 @@
+Scratch outputs from analysis runs. This folder is ignored by git. Final paper-ready assets must be exported to paper/figures and paper/tables using andrewdamico.export_figure() and andrewdamico.export_table().
