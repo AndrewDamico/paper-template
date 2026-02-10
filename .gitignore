@@ -1,13 +1,14 @@
 # Generated outputs
 paper/generated/*
+paper/generated_md/*
+paper/build/*
+
 !paper/generated/.gitkeep
 !paper/generated/README.md
 
-paper/generated_md/*
 !paper/generated_md/.gitkeep
 !paper/generated_md/README.md
 
-paper/build/*
 !paper/build/.gitkeep
 !paper/build/README.md
 
