@@ -1,0 +1,25 @@
+\documentclass[11pt]{article}
+
+\input{preamble/packages.tex}
+\input{preamble/macros.tex}
+
+\addbibresource{../refs/bibliography.bib}
+
+\title{Paper Title}
+\author{Author Name}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\InputIfFileExists{generated/00_abstract}{}{}
+\InputIfFileExists{generated/01_intro}{}{}
+\InputIfFileExists{generated/02_lit_review}{}{}
+\InputIfFileExists{generated/03_methods}{}{}
+\InputIfFileExists{generated/04_results}{}{}
+\InputIfFileExists{generated/05_discussion}{}{}
+\InputIfFileExists{generated/90_appendix}{}{}
+
+\printbibliography
+
+\end{document}

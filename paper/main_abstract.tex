@@ -1,0 +1,19 @@
+\documentclass[11pt]{article}
+
+\input{preamble/packages.tex}
+\input{preamble/macros.tex}
+
+\addbibresource{../refs/bibliography.bib}
+
+\title{Paper Title}
+\author{Author Name}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\InputIfFileExists{generated/00_abstract}{}{}
+
+\printbibliography
+
+\end{document}
