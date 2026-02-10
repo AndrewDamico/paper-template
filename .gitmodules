@@ -1,0 +1,3 @@
+[submodule "tooling/paper-tooling"]
+	path = tooling/paper-tooling
+	url = https://github.com/AndrewDamico/paper-tooling
